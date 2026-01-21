@@ -1,0 +1,32 @@
+{% extends "store/header.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-6 col-md-4 mb-4">
+            <h2 class="card-title fw-bold text-center">{{ product.name }}</h2>
+            <div class="card h-100 product-card shadow-sm">
+                <img src="{{ product.photo.url }}" class="card-img-top product-img">
+                <div class="card-body text-center">
+                    <h5 class="text-success fw-bold">
+                        NRs.{{ product.price }}
+                    </h5>
+                    <span class="badge bg-secondary mb-2">
+                        In stock: {{ product.quantity|floatformat:0 }}
+                    </span>
+                    <button class="btn btn-outline-dark w-100 mt-3">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "store/header.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<div class="container py-5 text-center">
+  
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                    <div class="card h-100 product-card shadow-sm">
+                        <a href="{% url 'store:detail' product.pk %}" class="text-decoration-none text-dark">
+                            <img src="{{ product.photo.url }}" class="card-img-top product-img">
+                        </a>
+                        <div class="card-body text-center">
+                            <form action="{% url 'store:cart' product.id %}" method="get">
+                                <h5 class="card-title fw-bold">
+                                    <a href="{% url 'store:detail' product.pk %}" class="text-decoration-none text-dark" name="item">
+                                        {{ product.name }}
+                                    </a>
+                                </h5>
+
+                                <h5 class="text-success fw-bold">
+                                    NRs.{{ product.price }}
+                                </h5>
+
+                                <span class="badge bg-secondary mb-2">
+                                    In stock: {{ product.quantity|floatformat:0 }}
+                                </span>
+                                    <button class="btn btn-outline-dark w-100 mt-3">
+                                        Add to Cart  
+                                    </button>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if products.has_other_pages %}
+    <ul class="pagination">
+        {% if products.has_previous %}
+        <li><a href="?page={{ products.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+
+        {% for i in products.paginator.page_range %}
+            {% if products.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if products.has_next %}
+        <li><a href="?page={{ products.next_page_number }}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</div>
+
+<style>
+.product-img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+</style>
+
+
+{% endblock %}
