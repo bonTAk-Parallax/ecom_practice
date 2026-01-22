@@ -9,7 +9,9 @@ from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 # Create your views here.
 
@@ -117,13 +119,32 @@ def search(request):
 
 
 
-def cart(request, pk, *args, **kwargs):
-    item = get_object_or_404(Product, pk=pk)
-    print(f"Item at this instance includes: {item}")
-    item.add_to_cart()
-    # import ipdb; ipdb.set_trace()
-    print(request.GET.get("page"))
+def cart(request, pk):
+    print(pk)
+    item = Product.objects.get(pk=pk)
+    order, created = Order.objects.get_or_create(customer = request.user, complete = False)
+    orderitem, created = OrderItem.objects.get_or_create(order=order, item = item)
+    orderitem.add_to_cart()
+    print(orderitem.price)
     return redirect('store:homepage')
+
+def checkout(request):
+    user = request.user
+    order = Order.objects.get(customer=user)
+    order_items = order.orderitem_set.filter()
+    print(order_items)
+    return render(request, 'store/checkout.html', {'order': order, "order_items": order_items})
+
+
+def cancel(request, pk):
+    order = Order.objects.get(pk=pk)
+    order.rollback()
+    return HttpResponseRedirect(reverse('store:homepage'))
+
+
+def confirm(self):
+    return HttpResponse("ORDER SUCCESSFULL!")
+
 
     
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product
+from .models import Product, Order, OrderItem
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -18,7 +18,17 @@ class ProductAdmin(admin.ModelAdmin):
         if obj and obj.photo is not None:
             return ((None, {"fields": ("name", "img_tag", "photo", "price", "quantity", "digital")}),)
         return ((None, {"fields": ( "name", "photo", "price", "quantity", "digital")}),)
+    
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    readonly_fields = ["customer"]
+    fields = ("customer", "complete")
 
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    readonly_fields = ["order"]
+    list_display = ("item", "item_quantity", "order")
+    fields = ("order", "item", "item_quantity")
 
 
 admin.site.register(Product, ProductAdmin)

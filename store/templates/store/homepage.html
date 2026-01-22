@@ -15,7 +15,6 @@
                             <img src="{{ product.photo.url }}" class="card-img-top product-img">
                         </a>
                         <div class="card-body text-center">
-                            <form action="{% url 'store:cart' product.id %}?page={{request.GET.page}}" method="get">
                                 <h5 class="card-title fw-bold">
                                     <a href="{% url 'store:detail' product.pk %}" class="text-decoration-none text-dark" name="item">
                                         {{ product.name }}
@@ -29,14 +28,20 @@
                                 <span class="badge bg-secondary mb-2">
                                     In stock: {{ product.quantity|floatformat:0 }}
                                 </span>
-                                    <button class="btn btn-outline-dark w-100 mt-3">
-                                        Add to Cart  
-                                    </button>
-                            </form>
+                                    <form action="{% url 'store:cart' product.id %}" method="get">
+                                        <button class="btn btn-outline-dark w-100 mt-3">
+                                            Add to Cart  
+                                        </button>
+                                    </form>
                         </div>
                     </div>
             </div>
         {% endfor %}
+        <form action="{% url 'store:checkout' %}" method="get">
+            <button class="btn btn-outline-dark w-100 mt-3">
+                Checkout  
+            </button>
+        </form>
     </div>
     {% if products.has_other_pages %}
     <ul class="pagination">
