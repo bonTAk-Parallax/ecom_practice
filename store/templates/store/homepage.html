@@ -15,7 +15,7 @@
                             <img src="{{ product.photo.url }}" class="card-img-top product-img">
                         </a>
                         <div class="card-body text-center">
-                            <form action="{% url 'store:cart' product.id %}" method="get">
+                            <form action="{% url 'store:cart' product.id %}?page={{request.GET.page}}" method="get">
                                 <h5 class="card-title fw-bold">
                                     <a href="{% url 'store:detail' product.pk %}" class="text-decoration-none text-dark" name="item">
                                         {{ product.name }}

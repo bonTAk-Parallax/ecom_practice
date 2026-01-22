@@ -1,0 +1,5 @@
+
+
+{% for product in products %}
+    {% url 'store:detail' product.pk %}
+{% endfor %}
