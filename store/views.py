@@ -107,15 +107,23 @@ def homepage(request):
 
 def detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
+    print("DETAILS LOADING....")
     return render(request, "store/product_detail.html", {"product": product})
 
 
 def search(request):
+    # p_name = request.GET.get('content')
+    # print(p_name)
+    # result = Product.objects.get(name__icontains = p_name)
+    # print(result)
+    # return render(request, "store/product_detail.html", {"product": result})
+
     p_name = request.GET.get('content')
     print(p_name)
-    result = Product.objects.get(name__icontains = p_name)
-    print(result)
-    return render(request, "store/product_detail.html", {"product": result})
+    results = Product.objects.filter(name__icontains = p_name)
+    print(results)
+    return render(request, "store/product_detail.html", {"products": results})
+
 
 
 
